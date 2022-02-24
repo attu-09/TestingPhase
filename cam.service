@@ -5,11 +5,13 @@
 
 # Human readable name of the unit
 Description=Camera Application 
+StartLimitBurst=3
+StartLimitIntervalSec=30
 
 [Service]
 
 #Command to execute when the service is started
-ExecStart=/usr/bin/python3 -u /etc/entomologist/cameraMain/cam.py
+ExecStart=/usr/bin/python3 -u /usr/sbin/cam/cam.py
 Environment=PYTHONBUFFERED=1
 StandardOutput=file:/var/tmp/entomologist-cam.log
 StandardError=inherit
