@@ -16,6 +16,8 @@ def entoDataWriter(parent,key,value):
 def testDevice(duration):
     if not scriptStatus:
         #start the services
+        subprocess.call(["systemctl","restart","cam"])
+        subprocess.call(["systemctl","restart","upload"])
         pass 
 
     while duration:
@@ -48,6 +50,7 @@ def checkProvisonState():
             print("Trying For Provison")
             try:
                 #call for provisoning script
+                subprocess.call(["python3","/usr/sbin/provision/boot.py"])
                 pass
             except:
                 #handle the exceptions
@@ -74,11 +77,15 @@ def mainLoop():
             print("Device Running")
             if not scriptStatus:
                 #Start both the services and write the status of the service in the status file
+                subprocess.call(["systemctl","restart","cam"])
+                subprocess.call(["systemctl","restart","upload"])
                 writeInScriptStatus(True)
         else:
             print("Timing not matching")
             if scriptStatus:
-                #Stop the service 
+                #Stop the service
+                subprocess.call(["systemctl","stop","cam"])
+                subprocess.call(["systemctl","stop","upload"])
                 writeInScriptStatus(False)
         
         time.sleep(3)
@@ -88,5 +95,6 @@ if __name__=="__main__":
     writeInScriptStatus(False)
     checkProvisonState()
     print("Running Job service")#RUN Job Service
+    subprocess.call(["systemctl","restart","jobreceiver"])
     mainLoop()
 
