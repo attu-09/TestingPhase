@@ -76,17 +76,26 @@ def first_check():
         # if ping returns false
         not_live = "\nCONNECTION NOT ACQUIRED\n"
         print(not_live)
- 
+        #------------------------
+        #--reconnecting routine--
+        time.sleep(5)
+        subprocess.call(["/usr/sbin/4g/4g.sh"])
+        #------------------------
         with open(FILE, "a") as file:
            
             # writes into the log file
             file.write(not_live)
         return False
  
- 
+
 def main():
    
     # main function to call functions
+    #------------------------
+    #--initializing routine--
+    time.sleep(15)
+    subprocess.call(["/usr/sbin/4g/4g.sh"])
+    #------------------------
     monitor_start_time = datetime.datetime.now()
     monitoring_date_time = "monitoring started at: " + \
         str(monitor_start_time).split(".")[0]
@@ -105,7 +114,7 @@ def main():
             if not ping():
                  
                 # if connection not acquired
-                time.sleep(1)
+                time.sleep(5)
             else:
                  
                 # if connection is acquired
@@ -141,14 +150,16 @@ def main():
                 file.write(fail_msg + "\n")
  
             while not ping():
-               
+
+                #------------------------
+                #--reconnecting routine--
+                time.sleep(5)
+                subprocess.call(["/usr/sbin/4g/4g.sh"])
+                #------------------------
                 # infinite loop, will run till ping() return true
                 time.sleep(1)
  
             up_time = datetime.datetime.now()
-            #---------------
-            #network routine
-            #---------------
             # after loop breaks, connection restored
             uptime_message = "connected again: " + str(up_time).split(".")[0]
  
