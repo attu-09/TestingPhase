@@ -3,7 +3,7 @@ import sys
 import socket
 import datetime
 import time
- 
+import subprocess
  
 FILE = os.path.join(os.getcwd(), "networkinfo.log")
  
@@ -77,7 +77,7 @@ def first_check():
         not_live = "\nCONNECTION NOT ACQUIRED\n"
         print(not_live)
         #------------------------
-        #--reconnecting routine--
+        #--reconnecting using 4g routine--
         time.sleep(5)
         subprocess.call(["/usr/sbin/4g/4g.sh"])
         #------------------------
@@ -91,11 +91,6 @@ def first_check():
 def main():
    
     # main function to call functions
-    #------------------------
-    #--initializing routine--
-    time.sleep(15)
-    subprocess.call(["/usr/sbin/4g/4g.sh"])
-    #------------------------
     monitor_start_time = datetime.datetime.now()
     monitoring_date_time = "monitoring started at: " + \
         str(monitor_start_time).split(".")[0]
@@ -152,9 +147,9 @@ def main():
             while not ping():
 
                 #------------------------
-                #--reconnecting routine--
-                time.sleep(5)
-                subprocess.call(["/usr/sbin/4g/4g.sh"])
+                #--reconnecting using 4g routine--
+                time.sleep(10)
+                subprocess.call(["/usr/sbin/4g/4g_restart.sh"])
                 #------------------------
                 # infinite loop, will run till ping() return true
                 time.sleep(1)
