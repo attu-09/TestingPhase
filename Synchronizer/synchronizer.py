@@ -1,16 +1,17 @@
 import time
 import json
 from datetime import datetime
+import requests
 
 global scriptStatus
 scriptStatus=False
-
+path = "/etc/entomologist/"
 def entoDataWriter(parent,key,value):
     data=None
-    with open("ento.conf",'r') as file:
+    with open(path + "ento.conf",'r') as file:
         data=json.load(file)
     data[parent][key]=value
-    with open("ento.conf",'w') as file:
+    with open(path + "ento.conf",'w') as file:
         file.write(json.dumps(data,indent=4))
 
 def testDevice(duration):
@@ -18,7 +19,6 @@ def testDevice(duration):
         #start the services
         subprocess.call(["systemctl","restart","cam"])
         subprocess.call(["systemctl","restart","upload"])
-        pass 
 
     while duration:
         print("Testing the device")
@@ -29,9 +29,9 @@ def testDevice(duration):
 
 def writeInScriptStatus(val): 
     data=None
-    with open("scriptStatus.json",'r') as file:
+    with open(path + "scriptStatus.json",'r') as file:
         data=json.load(file)
-    with open("scriptStatus.json",'w') as file:
+    with open(path + "scriptStatus.json",'w') as file:
         data['status']=val
         file.write(json.dumps(data,indent=2))
         scriptStatus=val
@@ -40,7 +40,7 @@ def checkProvisonState():
     print("checking Provison state")
     while True:
         data=None
-        with open("ento.conf",'r') as file:
+        with open(path + "ento.conf",'r') as file:
             data=json.load(file)
 
         if data['device']['PROVISION_STATUS']=='True':
@@ -51,16 +51,23 @@ def checkProvisonState():
             try:
                 #call for provisoning script
                 subprocess.call(["python3","/usr/sbin/provision/boot.py"])
-                pass
-            except:
-                #handle the exceptions
-                pass
-        time.sleep(3)
+                p = subprocess.Popen("ifconfig", stdout=subprocess.PIPE, shell=True)
+                (output, err) = p.communicate()
+                device=data['device']["SERIAL_ID"] #should be getting from the conf file
+                #ip="64.2.232.22" #should be find by pratyush bhaiya
+                url="https://en0xlpnmw1.execute-api.us-east-1.amazonaws.com/send"
+                param={'device':device,'ip':str(output)}
+                resp=requests.get(url,params=param)
+            except Exception as e:
+                with open (path + "Error.txt", "a") as file:
+                    file.write(str(e))
+
+        time.sleep(10)
 
 def mainLoop():
     while True:
         data=None
-        with open("ento.conf",'r') as file:
+        with open(path + "ento.conf",'r') as file:
             data=json.load(file)
 
         if data['device']['TEST_FLAG']=='True':
