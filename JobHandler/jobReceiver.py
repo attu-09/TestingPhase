@@ -57,7 +57,7 @@ def parse(jobconfig,client):
             onDuration=jobconfig['device']['Device-On-Time']
                         
             updateData("device",{"ON_TIME":onTime})
-            updateData("device",{"ON_DURATION":onDuration})
+            updateData("device",{"OFF_TIME":onDuration})
             
 
     except:
