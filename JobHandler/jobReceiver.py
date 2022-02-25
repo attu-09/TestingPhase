@@ -9,8 +9,8 @@ import threading
 
 now=datetime.now()
 time_stamp=now.strftime("%m/%d/%Y, %H:%M:%S")
-
-with open(f"ento.conf",'r') as file:
+path = "/etc/entomologist/"
+with open(path + "ento.conf",'r') as file:
 	data=json.load(file)
 
 MQTT_BROKER = data["device"]["ENDPOINT_URL"]
@@ -21,17 +21,17 @@ JOB_CLIENT = f'JobReciverClient-{SERIAL_ID}'
 JOB_TOPIC = f'cameraDevice/job/{SERIAL_ID}'
 QoS = 0
 
-rootCA = '/etc/entomologist/cert/AmazonRootCA1.pem'
-cert = '/etc/entomologist/cert/certificate.pem.crt'
-privateKey = '/etc/entomologist/cert/private.pem.key'
+rootCA = path + 'cert/AmazonRootCA1.pem'
+cert = path + 'cert/certificate.pem.crt'
+privateKey = path + 'cert/private.pem.key'
 
 
 def updateData(name,keyValue):
         data={}
-        with open(f"/etc/entomologist/ento.conf",'r') as file:
+        with open(path + "ento.conf",'r') as file:
             data=json.load(file)
             dataa=data[name]
-        with open(f"/etc/entomologist/ento.conf",'w') as file:
+        with open(path + "ento.conf",'w') as file:
             dataa.update(keyValue)
             data.update({name:dataa})
             json.dump(data,file,indent=4,separators=(',', ': '))
@@ -103,5 +103,8 @@ def restart_recieving_job():
 
 
 if __name__ == '__main__':
-	
-	start_recieving_job()
+	while True:
+		try:	
+			start_recieving_job()
+		except:
+			time.sleep(5)
