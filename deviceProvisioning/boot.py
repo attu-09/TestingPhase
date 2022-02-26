@@ -24,9 +24,8 @@ with open(f"/etc/entomologist/ento.conf",'r') as file:
 iot_endpoint = data["device"]["ENDPOINT_URL"] # AWS ARN
 provisionstatus=data["device"]["PROVISION_STATUS"]
 
-if provisionstatus=="provisioned":
+if provisionstatus=="True":
     print("device already provisioned")
-    sleep(60)
     sys.exit("to retry provision, restart boot service...")
 
 def on_connection_interrupted(connection, error, **kwargs):
@@ -115,8 +114,8 @@ def wait_for_register_thing_response():
 		print(f"Waiting... RegisterThingResponse: {json.dumps(register_thing_response)}")
 		sleep(1)
 
-while True:
-    if provisionstatus=="unprovisioned":
+for _ in range(1):
+    if provisionstatus=="False":
         # Parse connection configuration values
         print(iot_endpoint)
         root_cert_path = "/etc/entomologist/bootstrap/AmazonRootCA1.pem"
@@ -274,6 +273,4 @@ while True:
 
         	sys.exit("Device provisioned successfully")
 
-    else:
-        print("waiting...")
-        time.sleep(60)
+  
