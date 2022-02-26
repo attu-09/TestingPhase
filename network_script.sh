@@ -9,9 +9,9 @@ led_state=OFF
 while true
 do
     network_status=$(nmcli -t -f STATE g)
-    internet_status=$(ping -q -c 1 -W 1 8.8.8.8 | awk '/received/ {print $4}')
+    internet_status=$(ping google.com | awk '/received/ {print $4}')
 
-    if [[ $network_status = connected && $internet_status = 1 ]]
+    if [[ $internet_status = 1 ]]
     then
         if [ $led_state = OFF ]
         then
