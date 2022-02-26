@@ -146,7 +146,7 @@ def weather():
 	file = open("weather.txt", "a")
 	file.writelines("\n"+time+" , "+", ".join(str(output)[2:len(output)-1].split("\\n"))+lux+"\n")
 	file.close()
-	time.sleep(10)
+	time.sleep(3)
 
 def weatherupload():
 	filename = "weather.txt"
@@ -170,14 +170,13 @@ def weatherupload():
 def main():
 	while True:
 		if provisionstatus=="True":
+			weather()
 			while len(os.listdir(BUFFER_IMAGES_PATH)):
 				filesList = os.listdir(BUFFER_IMAGES_PATH)[:10]
 				weatherupload()
-
 				upload_manager(filesList)
-
 			print("waiting...")
-			weather()
+			time.sleep(1)
 		else:
 			print("waiting...")
 			time.sleep(10)
