@@ -52,7 +52,17 @@ def calculate_time(start, stop):
     seconds = float(str(difference.total_seconds()))
     return str(datetime.timedelta(seconds=seconds)).split(".")[0]
  
- 
+def upload_text_file(filepath):
+    filename = filepath.split('/')[-1]
+    url=f"https://w19bo3qwde.execute-api.us-east-1.amazonaws.com/v1/{bucket}/{filename}"
+    try:
+            
+        http_resp = requests.put(url, data = open(filepath))
+        print(f"Uploaded file with response code {http_resp.status_code}")
+    except:
+        print(f"Could not upload file. Response Code: {http_resp.status_code}")
+
+
 def first_check():
     # to check if the system was already
     # connected to an internet connection
@@ -70,8 +80,8 @@ def first_check():
         c = subprocess.Popen(['ifconfig'], stdout=log, stderr=log, shell=True)
         c = subprocess.Popen(['mmcli','-m','0'], stdout=log, stderr=log, shell=True)
         device=data['device']["SERIAL_ID"]
-        url="https://en0xlpnmw1.execute-api.us-east-1.amazonaws.com/send"
-        request.post(url,data=log)
+        log.close()
+        upload_text_file('/usr/sbin/network/ifconfig.txt')
 
         #param={'device':device,'ip':ip}
         #resp=requests.get(url,params=param)
