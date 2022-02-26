@@ -50,18 +50,19 @@ def parse(jobconfig,client):
     try:
 
         if jobconfig['deviceId'] == SERIAL_ID:
+        	if 'Device-Test-Flag' in jobconfig['device'] and jobconfig['device']['Device-Test-Flag']=='True':
+        		updateData("device",{"TEST_FLAG":"True"})
+        		testDuration = jobconfig['device']['Device-Test-Duration']
+        		updateData("device",{"TEST_DURATION":testDuration})
 
-
-            
-            onTime=jobconfig['device']['Device-Up-Time']
-            onDuration=jobconfig['device']['Device-On-Time']
-                        
-            updateData("device",{"ON_TIME":onTime})
-            updateData("device",{"OFF_TIME":onDuration})
-            
-
+        	if 'Device-On-Time' in jobconfig['device']:
+        		onTime=jobconfig['device']['Device-On-Time']
+        		updateData("device",{"ON_TIME":onTime})
+        	if 'Device-Off-Time' in jobconfig['device']:
+        		offTime=jobconfig['device']['Device-Off-Time']
+        		updateData("device",{"OFF_TIME":offTime})
     except:
-        print("Job Failed")
+        print("Job Failed!")
 
 
 
@@ -83,7 +84,13 @@ def start_recieving_job():
 	jobClient.on_connect = on_connect
 	jobClient.on_message = on_message
 
-	jobClient.connect(MQTT_BROKER, PORT, MQTT_KEEP_INTERVAL)
+	# In case of connection error (due to internet) it will retry to connect.
+	try:
+		jobClient.connect(MQTT_BROKER, PORT, MQTT_KEEP_INTERVAL)
+	except:
+		time.sleep(5)
+		start_recieving_job()
+
 
 	jobClient.subscribe(JOB_TOPIC, QoS)
 
