@@ -16,7 +16,7 @@ Environment=PYTHONBUFFERED=1
 StandardOutput=file:/var/tmp/entomologist-cam.log
 StandardError=inherit
 # Automatically restart the service if it crashes
-Restart=always
+Restart=on-failure
 
 [Install]
 
