@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import threading
 from datetime import datetime
+import json
 
 with open(f"/etc/entomologist/ento.conf",'r') as file:
     data=json.load(file)
