@@ -169,7 +169,7 @@ def weatherupload():
 
 def main():
 	while True:
-		if provisionstatus=="provisioned":
+		if provisionstatus=="True":
 			while len(os.listdir(BUFFER_IMAGES_PATH)):
 				filesList = os.listdir(BUFFER_IMAGES_PATH)[:10]
 				weatherupload()
