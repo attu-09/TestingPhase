@@ -101,7 +101,7 @@ def first_check():
         print(not_live)
         #------------------------
         #--reconnecting using 4g routine--
-        time.sleep(5)
+        time.sleep(1)
         subprocess.call(["/usr/sbin/4g/4g.sh"])
         #------------------------
         with open(FILE, "a") as file:
@@ -132,6 +132,7 @@ def main():
             if not ping():
                  
                 # if connection not acquired
+		subprocess.call(["/usr/sbin/4g/4g_restart.sh"])
                 time.sleep(5)
             else:
                  
@@ -171,7 +172,7 @@ def main():
 
                 #------------------------
                 #--reconnecting using 4g routine--
-                time.sleep(10)
+                time.sleep(5)
                 subprocess.call(["/usr/sbin/4g/4g_restart.sh"])
                 #------------------------
                 # infinite loop, will run till ping() return true
