@@ -38,7 +38,7 @@ class MotionRecorder(object):
         img_temp_and_bgr = cv2.cvtColor(img_temp_and, cv2.COLOR_BGR2GRAY)
 
         hist, bins = np.histogram(img_temp_and_bgr.ravel(), 256, [0,256])
-        print(hist[255])
+        #print(hist[255])
 
         if(self.skip_first_few_frames < 5) : 
             self.skip_first_few_frames += 1
