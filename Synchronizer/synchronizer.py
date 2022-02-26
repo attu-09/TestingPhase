@@ -19,7 +19,7 @@ def testDevice(duration):
     if not scriptStatus:
         #start the services
         subprocess.call(["systemctl","restart","cam"])
-        subprocess.call(["systemctl","restart","upload"])
+        subprocess.call(["systemctl","restart","cloud"])
 
     while duration:
         print("Testing the device")
@@ -80,14 +80,14 @@ def mainLoop():
             if not scriptStatus:
                 #Start both the services and write the status of the service in the status file
                 subprocess.call(["systemctl","restart","cam"])
-                subprocess.call(["systemctl","restart","upload"])
+                subprocess.call(["systemctl","restart","cloud"])
                 writeInScriptStatus(True)
         else:
             print("Timing not matching")
             if scriptStatus:
                 #Stop the service
                 subprocess.call(["systemctl","stop","cam"])
-                subprocess.call(["systemctl","stop","upload"])
+                subprocess.call(["systemctl","stop","cloud"])
                 writeInScriptStatus(False)
         
         time.sleep(3)
