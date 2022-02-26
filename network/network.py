@@ -1,6 +1,5 @@
 import os
 import sys
-import socket
 import datetime
 import time
 import subprocess
@@ -18,31 +17,10 @@ with open(path + "ento.conf",'r') as file:
 def ping():
     # to ping a particular IP
     try:
-        socket.setdefaulttimeout(3)
-         
-        # if data interruption occurs for 3
-        # seconds, <except> part will be executed
- 
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # AF_INET: address family
-        # SOCK_STREAM: type for TCP
- 
-        host = "8.8.8.8"
-        port = 53
- 
-        server_address = (host, port)
-        s.connect(server_address)
- 
-    except OSError as error:
-        return False
-        # function returns false value
-        # after data interruption
- 
-    else:
-        s.close()
-        # closing the connection after the
-        # communication with the server is completed
-        return True
+		requests.get("https://www.google.com")
+		return True
+    except:
+		return False
  
  
 def calculate_time(start, stop):
