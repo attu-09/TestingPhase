@@ -51,13 +51,7 @@ def checkProvisonState():
             try:
                 #call for provisoning script
                 subprocess.call(["python3","/usr/sbin/provision/boot.py"])
-                p = subprocess.Popen("ifconfig", stdout=subprocess.PIPE, shell=True)
-                (output, err) = p.communicate()
-                device=data['device']["SERIAL_ID"] #should be getting from the conf file
-                #ip="64.2.232.22" #should be find by pratyush bhaiya
-                url="https://en0xlpnmw1.execute-api.us-east-1.amazonaws.com/send"
-                param={'device':device,'ip':str(output)}
-                resp=requests.get(url,params=param)
+                
             except Exception as e:
                 with open (path + "Error.txt", "a") as file:
                     file.write(str(e))
