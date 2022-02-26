@@ -5,6 +5,7 @@ import datetime
 import time
 import subprocess
 import requests
+import json
  
 FILE = os.path.join(os.getcwd(), "networkinfo.log")
  
