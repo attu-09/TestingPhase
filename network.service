@@ -4,7 +4,7 @@
 [Unit]
 
 # Human readable name of the unit
-Description=Upload Application
+Description=Network management Application
 StartLimitBurst=3
 StartLimitIntervalSec=30
 
