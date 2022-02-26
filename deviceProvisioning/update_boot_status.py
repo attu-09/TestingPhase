@@ -52,7 +52,7 @@ def update_boot_status(serialID):
 		dataa=data["device"]
 
 	with open(f"/etc/entomologist/ento.conf",'w') as file:
-		dataa.update({"PROVISION_STATUS":"provisioned"})
+		dataa.update({"PROVISION_STATUS":"True"})
 		data.update({"device":dataa})
 		json.dump(data,file,indent=4,separators=(',', ': '))
 	pubClient.loop_forever()
