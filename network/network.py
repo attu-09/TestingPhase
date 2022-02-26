@@ -4,14 +4,16 @@ import socket
 import datetime
 import time
 import subprocess
+import requests
  
 FILE = os.path.join(os.getcwd(), "networkinfo.log")
  
 # creating log file in the currenty directory
 # ??getcwd?? get current directory,
 # os function, ??path?? to specify path
- 
- 
+path = "/etc/entomologist/"
+with open(path + "ento.conf",'r') as file:
+	data=json.load(file)
 def ping():
     # to ping a particular IP
     try:
@@ -60,9 +62,20 @@ def first_check():
         live = "\nCONNECTION ACQUIRED\n"
         print(live)
         connection_acquired_time = datetime.datetime.now()
-        acquiring_message = "connection acquired at: " + \
-            str(connection_acquired_time).split(".")[0]
+        acquiring_message = "connection acquired at: " + str(connection_acquired_time).split(".")[0]
         print(acquiring_message)
+        log = open('ifconfig.txt', 'a')
+        log.write('ifconfig data for device : '+data['device']["SERIAL_ID"]+" at "+ str(connection_acquired_time).split(".")[0]+'\n')
+        log.flush()  # <-- here's something not to forget!
+        c = subprocess.Popen(['ifconfig'], stdout=log, stderr=log, shell=True)
+        c = subprocess.Popen(['mmcli','-m','0'], stdout=log, stderr=log, shell=True)
+        device=data['device']["SERIAL_ID"]
+        url="https://en0xlpnmw1.execute-api.us-east-1.amazonaws.com/send"
+        request.post(url,data=log)
+
+        #param={'device':device,'ip':ip}
+        #resp=requests.get(url,params=param)
+
  
         with open(FILE, "a") as file:
            
