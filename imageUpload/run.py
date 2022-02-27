@@ -136,7 +136,7 @@ def upload_manager(filesList):
 
 def weather():
 	p = subprocess.Popen("/usr/sbin/weather/hts221", stdout=subprocess.PIPE, shell=True) # Use script file instead.
-	time = str(dt.datetime.now())
+	tim = str(dt.datetime.now())
 	(output, err) = p.communicate()
 	L = random.randint(400,600)
 	lux = " , Light Intensity : "+str(L)
@@ -144,7 +144,7 @@ def weather():
 	#print("Command output : ", output)
 	#print("Command exit status/return code : ", p_status)
 	file = open("weather.txt", "a")
-	file.writelines("\n"+time+" , "+", ".join(str(output)[2:len(output)-1].split("\\n"))+lux+"\n")
+	file.writelines("\n"+tim+" , "+", ".join(str(output)[2:len(output)-1].split("\\n"))+lux+"\n")
 	file.close()
 	time.sleep(3)
 
